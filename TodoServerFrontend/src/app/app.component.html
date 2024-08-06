@@ -1,0 +1,64 @@
+
+<label>
+	Task Name:
+	<input [(ngModel)]="taskname" />
+</label>
+<label>
+	Deadline Time:
+	<input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="date">
+	<owl-date-time #dt></owl-date-time>
+</label>
+<label>
+	<br />
+	Task Details:
+	<br />
+<textarea [(ngModel)]="taskdetails" style="width: 522px; height: 66px;"></textarea>
+	<br />
+</label>
+<button (click)="addTodo()">Add</button>
+<br />
+<br />
+<br />
+<br />
+<br />
+<label>
+	ID:
+	<input [(ngModel)]="ID" />
+</label>
+<br />
+<label>
+	ID End Range:
+	<input [(ngModel)]="IDEnd" />
+</label>
+<br />
+<button (click)="getTodoWithID()">Get Task by ID</button>
+<button (click)="getTodoList()">Get All Tasks</button>
+<br />
+<br />
+<button (click)="deleteTodo()">Delete Task by ID</button>
+<br />
+<br />
+<button (click)="getUniqueID()">Get Unique ID</button>
+<button (click)="sortByDeadlineDate()">Sort By Deadline</button>
+<br />
+<hr />
+<table *ngIf="tasks">
+	<thead>
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Details</th>
+		<th>Deadline</th>
+		<th>Created</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr *ngFor="let task of tasks">
+		<td>{{ task.id }}	 </td>
+		<td>{{ task.taskName }}	 </td>
+		<td>{{ task.taskDetails }}		</td>
+		<td>{{ task.taskDeadline }}	 </td>
+		<td>{{ task.taskCreationDate }}</td>
+	</tr>
+	</tbody>
+</table>

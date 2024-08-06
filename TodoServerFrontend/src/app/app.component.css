@@ -1,0 +1,21 @@
+td{
+	border-bottom: 1px dotted black;
+	border-left: 1px dashed black;
+	padding-left: 3px;
+	font-size: 25px;
+	width:auto;
+}
+
+th {
+	border-bottom: 2px groove black;
+	border-left: 1px dashed black;
+	font-size: 25px;
+}
+
+table{
+		width:100%;
+}
+
+label {
+	font-size: 25px;
+}
