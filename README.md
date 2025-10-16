@@ -159,7 +159,7 @@ RestartSec=10
 KillSignal=SIGINT
 
 # For debugging/logs
-SyslogIdentifier=todositebackend
+SyslogIdentifier=todoserverbackend
 
 # User to run as
 User=www-data
