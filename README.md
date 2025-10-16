@@ -45,7 +45,7 @@ You should now have two folders in the directory you unzipped them in: `TodoServ
 
 Determine what port the backend runs on (this is typically 5000) by running the associated dll:
 ```
-dotnet todo-server-backend/TodoServerBackend.dll
+dotnet TodoServerBackend/TodoServerBackend.dll
 ```
 This will usually say:
 ```
