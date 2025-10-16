@@ -4,6 +4,8 @@ This is a very minimal to-do list project.
 
 ## Built Release Usage (Ubuntu Server)
 (This was written on August 6th, 2024)
+Updated:
+October 16th, 2025 (v2.0.0)
 
 
 Extract the .zip from the Release. It should be in the format `TodoServerRelease-x.y.z.zip`, where `x.y.z` is the TodoServer version.
