@@ -12,7 +12,8 @@ Extract the .zip from the Release. It should be in the format `TodoServerRelease
 (If you wish to use on Windows, you can go to the .NET website and download the runtimes for whatever version is specified by the .NET version in the associated release).
 
 Run these commands as a user with sudo permissions:
-```# Get OS version info which adds the $ID and $VERSION_ID variables
+```
+# Get OS version info which adds the $ID and $VERSION_ID variables
 source /etc/os-release
 
 # Download Microsoft signing key and repository
@@ -40,7 +41,7 @@ wget https://github.com/CoderUser141/TodoServer/releases/latest/download/TodoSer
 unzip TodoServerRelease-x.y.z.zip
 ```
 
-You should now have two folders in the directory you unzipped them in: `todo-server-backend` and `todo-server-frontend`.
+You should now have two folders in the directory you unzipped them in: `TodoServerBackendD` (or `todo-server-backend`) and `TodoServerFrontendD` (or `todo-server-frontend`).
 
 Determine what port the backend runs on (this is typically 5000) by running the associated dll:
 ```
@@ -48,22 +49,24 @@ dotnet todo-server-backend/TodoServerBackend.dll
 ```
 This will usually say:
 ```
-info: Microsoft.Hosting.Lifetime[14]                                                       Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[14]            Now listening on: http://localhost:5000
 ...more output...
 ```
 If this number is NOT 5000, make a note of it.
 
 ###  Setting up the frontend with NGINX
 
-Copy `todo-server-frontend` to `/var/www/` by running:
+Copy `TodoServerFrontend` (or `todo-server-frontend`) to `/var/www/` by running:
 ```
-sudo cp -R todo-server-frontend /var/www
+sudo cp -R TodoServerFrontend /var/www
+#sudo cp -R todo-server-frontend /var/www
 ```
 
 Set proper permissions for NGINX with:
 ```
-sudo chown -R www-data:www-data /var/www/todo-server-frontend
-sudo chmod -R 755 /var/www/todo-server-frontend
+# remember if you have todo-server-frontend or TodoServerFrontend
+sudo chown -R www-data:www-data /var/www/TodoServerFrontend
+sudo chmod -R 755 /var/www/TodoServerFrontend
 ```
 
 This will ensure NGINX has proper permissions to read from the website frontend.
@@ -87,7 +90,7 @@ Paste in this configuration (I use this personally, and 4673 port can be changed
 server{
     listen 0.0.0.0:4673;
     location /{
-        root /var/www/todo-server-frontend/browser;
+        root /var/www/TodoServerFrontend/browser;
         index index.html;
     }
     location /todo/{
@@ -117,7 +120,8 @@ Then ensure that the website pops up by going to the IP address of the server: x
 
 Additionally, if you would like to test the backend, run:
 ```
-dotnet todo-server-backend/TodoServerBackend.dll
+#dotnet todo-server-backend/TodoServerBackend.dll
+dotnet /var/www/TodoServerBackend/TodoServerBackend.dll
 ```
 Ensure that you can add/delete/read todo tasks.
 
@@ -125,27 +129,29 @@ Ensure that you can add/delete/read todo tasks.
 
 Copy the backend files to `/var/www` (similar to the frontend steps above.):
 ```
-sudo cp -R todo-server-backend /var/www
+#sudo cp -R todo-server-backend /var/www
+sudo cp -R TodoServerBackend /var/www
 ```
 You might be tempted to reuse the commands from earlier, but using `chmod -R 755` WILL break the backend (it needs read permissions to access the database). Instead, run:
 ```
-sudo chown -R www-data:www-data /var/www/todo-server-backend
-sudo chmod -R 777 /var/www/todo-server-backend
+# remember if you have todo-server-backend or TodoServerBackend
+sudo chown -R www-data:www-data /var/www/TodoServerBackend
+sudo chmod -R 777 /var/www/TodoServerBackend
 ```
 Now, create a file in `/etc/systemd/system/`:
 ```
-sudo nano /etc/systemd/system/todositebackend.service
+sudo nano /etc/systemd/system/todoserverbackend.service
 ```
 Paste in the following configuration, and save the file:
 ```
-[Unit]                                                                                                                  Description=Backend service for TODO site. Built on ASP.NET, and accessed through frontend Angular at /var/www/todo-server-frontend.
+[Unit]                                                                                                                  Description=Backend service for TODO site. Built on ASP.NET, and accessed through frontend Angular at /var/www/TodoServerFrontend.
 
 [Service]
 # Specifies working directory
-WorkingDirectory=/var/www/todo-server-backend
+WorkingDirectory=/var/www/TodoServerBackend
 
 # Specifies the command to run
-ExecStart=/usr/share/dotnet/dotnet /var/www/todo-server-backend/TodoServerBackend.dll
+ExecStart=/usr/share/dotnet/dotnet /var/www/TodoServerBackend/TodoServerBackend.dll
 
 Restart=always
  # Restart service after 10 seconds if the dotnet service crashes:
@@ -171,19 +177,19 @@ sudo systemctl daemon-reload
 ```
 Enable and start the service:
 ```
-sudo systemctl enable todositebackend && sudo systemctl start todositebackend
+sudo systemctl enable todoserverbackend && sudo systemctl start todoserverbackend
 ``` 
 Check the service's status with
 ```
-systemctl status todositebackend
+systemctl status todoserverbackend
 ```
 If there is an error somewhere, view the full logs here:
 ```
-sudo journalctl -t todositebackend
+sudo journalctl -t todoserverbackend
 ```
 To stop the service:
 ```
-sudo systemctl stop todositebackend
+sudo systemctl stop todoserverbackend
 ```
 
 You should now have a running server.
@@ -200,11 +206,11 @@ This should make a new folder called `dist` in the same directory. Within it wil
 
 For the backend, you have two options (that I know of):
 ### Visual Studio
-In Visual Studio, open the project file (TodoServerBackend.csproj). Then, right-click on the project in Solution Explorer and click "publish". This will create a new folder in `(rootDirectoryOfSolution)/TodoServer/TodoServerBackend/bin/Release/net\<version\>/` called `publish`. Copy the files in the `publish` folder to a new folder called `todo-server-backend`. This will be the same folder used in the Release package.
+In Visual Studio, open the project file (TodoServerBackend.csproj). Then, right-click on the project in Solution Explorer and click "publish". This will create a new folder in `(rootDirectoryOfSolution)/TodoServer/TodoServerBackend/bin/Release/net-\<version\>/` called `publish`. Copy the files in the `publish` folder to a new folder called `todo-server-backend`. This will be the same folder used in the Release package.
 
 ### Command line
 In `(rootDirectoryOfSolution)/TodoServer/TodoServerBackend`, run
 ```
 dotnet publish
 ```
-As above, it will create a new folder in `(rootDirectoryOfSolution)/TodoServer/TodoServerBackend/bin/Release/net\<version\>/` called `publish`. Copy the files in the `publish` folder to a new folder called `todo-server-backend`. This will be the same folder used in the Release package.
+As above, it will create a new folder in `(rootDirectoryOfSolution)/TodoServer/TodoServerBackend/bin/Release/net-\<version\>/` called `publish`. Copy the files in the `publish` folder to a new folder called `todo-server-backend`. This will be the same folder used in the Release package.
