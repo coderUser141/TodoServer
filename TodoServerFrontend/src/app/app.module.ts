@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+//import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -12,7 +12,8 @@ import { FormsModule } from '@angular/forms';
 		AppComponent
 	],
 	imports: [
-		BrowserModule, BrowserAnimationsModule, HttpClientModule, OwlDateTimeModule, OwlNativeDateTimeModule, AppRoutingModule, FormsModule
+		BrowserModule, BrowserAnimationsModule, HttpClientModule, 
+		/*OwlDateTimeModule, OwlNativeDateTimeModule,*/ AppRoutingModule, FormsModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

@@ -1,48 +1,85 @@
+<div id="mainui">
+	<div>
+		<label>
+			<input [(ngModel)]="FormTaskName" placeholder="Task Name" />
+		</label>
+		<label>
+			<span>Include time?</span>
+			<input type="checkbox" [checked]="FormIncludeTime" (change)="FormIncludeTime = !FormIncludeTime"/>
+		</label>
+		<label>
+			<input [type]="FormIncludeTime ? 'datetime-local' : 'date'" [(ngModel)]="FormTaskDeadline"/>
+		</label>
+		<label>
+			<br />
+		<textarea [(ngModel)]="FormTaskDetails" style="width: 500px; height: 66px;"  placeholder="Task Details"></textarea>
+			<br />
+		</label>
+		<label>
+			<input [(ngModel)]="FormTaskGrade" placeholder="Grade (%)" type="number" min="0"/>
+		</label>
+		<label>
+			<input [(ngModel)]="FormTaskWeight" placeholder="Weight (%)" type="number" max="100" min="0" step="0.01"/>
+		</label>
+		<br/>
+		<label>
+			<span class="tpcplabel">Project for Task: </span>
+			<input list="pidlist" [(ngModel)]="FormTaskProjectID"/>
+			<datalist id="pidlist">
+				@for(option of OutputTaskProjectIDList; track option[0]){
+					<option [value]="option[1]">{{ option[1]}}</option>
+				} @empty {
+					<option>New...</option>
+				}
+			</datalist>
+		</label>
 
-<label>
-	Task Name:
-	<input [(ngModel)]="taskname" />
-</label>
-<label>
-	Deadline Time:
-	<input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="date">
-	<owl-date-time #dt></owl-date-time>
-</label>
-<label>
-	<br />
-	Task Details:
-	<br />
-<textarea [(ngModel)]="taskdetails" style="width: 522px; height: 66px;"></textarea>
-	<br />
-</label>
-<button (click)="addTodo()">Add</button>
-<br />
-<br />
-<br />
-<br />
-<br />
-<label>
-	ID:
-	<input [(ngModel)]="ID" />
-</label>
-<br />
-<label>
-	ID End Range:
-	<input [(ngModel)]="IDEnd" />
-</label>
-<br />
-<button (click)="getTodoWithID()">Get Task by ID</button>
-<button (click)="getTodoList()">Get All Tasks</button>
-<br />
-<br />
-<button (click)="deleteTodo()">Delete Task by ID</button>
-<br />
-<br />
-<button (click)="getUniqueID()">Get Unique ID</button>
-<button (click)="sortByDeadlineDate()">Sort By Deadline</button>
-<br />
+		<br />
+		<label>
+			<span class="tpcplabel">Category for Project: </span>
+			<input list="cidlist" [(ngModel)]="FormProjectCategoryID"/>
+			<datalist id="cidlist">
+				@for(option of OutputProjectCategoryIDList; track option[0]){
+					<option [value]="option[1]">{{ option[1]}}</option>
+				} @empty {
+					<option>New...</option>
+				}
+			</datalist>
+		</label>
+		<br />
+		<label>
+			<select name="status">
+				<option (click)="updateCompletionStatus(TCS.NotStarted)">Not Started</option>
+				<option (click)="updateCompletionStatus(TCS.InProgress)">In Progress</option>
+				<option (click)="updateCompletionStatus(TCS.Completed)">Completed</option>
+				<option (click)="updateCompletionStatus(TCS.Skipped)">Skipped</option>
+			</select>
+		</label>
+		<br />
+		<button (click)="addTodo()">Add</button>
+	</div>
+	<div>
+		<label>	
+			<input [(ngModel)]="FormID"  placeholder="ID or ID Start"/>
+		</label>
+		<label>
+			<input [(ngModel)]="FormIDEnd"  placeholder="ID End"/>
+		</label>
+		<br />
+		<button (click)="getTodoWithID()">Get Task by ID</button>
+		<button (click)="getTodoList()">Get All Tasks</button>
+		<br />
+		<br />
+		<button (click)="deleteTodo()">Delete Task by ID</button>
+		<br />
+		<br />
+		<button (click)="getUniqueID()">Get Unique ID</button>
+		<button (click)="sortByDeadlineDate()">Sort By Deadline</button>
+	</div>
+</div>
 <hr />
-<table *ngIf="tasks">
+@if(OutputTaskList){
+<table>
 	<thead>
 	<tr>
 		<th>ID</th>
@@ -50,15 +87,33 @@
 		<th>Details</th>
 		<th>Deadline</th>
 		<th>Created</th>
+		<th>Weight</th>
+		<th>Grade</th>
+		<th>Project Name</th>
+		<th>Category Name</th>
+		<th>Completion Status</th>
 	</tr>
 	</thead>
 	<tbody>
-	<tr *ngFor="let task of tasks">
-		<td>{{ task.id }}	 </td>
-		<td>{{ task.taskName }}	 </td>
-		<td>{{ task.taskDetails }}		</td>
-		<td>{{ task.taskDeadline }}	 </td>
-		<td>{{ task.taskCreationDate }}</td>
-	</tr>
+	
+	<!--<tr *ngFor="let Task of this.OutputTaskList">-->
+	@for (Task of OutputTaskList; track Task.id){
+		<tr>
+			<!--<td>{{ Task | json }}</td>-->
+			<td>{{ Task.id }}</td>
+			<td>{{ Task.outputTaskName}}</td>
+			<td>{{ Task.outputTaskDetails }}</td>
+			<td>{{ Task.outputTaskDeadline }}</td>
+			<td>{{ Task.outputTaskCreationDate }}</td>
+			<td>{{ Task.outputTaskWeight }}</td>
+			<td>{{ Task.outputTaskGrade }}</td>
+			<td>{{ Task.outputTaskProjectName }}</td>
+			<td>{{ Task.outputProjectCategoryName }}</td>
+			<td>{{ decodeCompletionStatus(Task.outputTaskCompletionStatus) }}</td>
+		</tr>
+	} @empty {
+		<tr><td colspan="5">No tasks</td></tr>
+	}
 	</tbody>
 </table>
+}
