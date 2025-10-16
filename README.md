@@ -103,7 +103,7 @@ server{
     error_log /var/www/error.log warn;
 }
 ```
-<b>NOTE:</b> If the port number for the backend was different than 5000, <b>change it here:</b> i.e. it would now be `proxy_pass http://localhost:yourportnumber`
+<b>NOTE:</b> If the port number for the backend was different than 5000, <b>change it here:</b> i.e. it would now be `proxy_pass http://localhost:yourportnumber/todo/`
 
 Test that the configuration works by running:
 ```
