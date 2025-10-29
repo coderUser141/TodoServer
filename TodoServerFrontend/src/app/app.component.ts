@@ -70,6 +70,7 @@ export class AppComponent implements OnInit {
 
 	updateCompletionStatus(status: TaskCompletionStatus): void{
 		this.FormTaskCompletionStatus = status;
+		//alert(this.FormTaskCompletionStatus);
 	}
 
 	decodeCompletionStatus(status: number): string{
@@ -94,7 +95,7 @@ export class AppComponent implements OnInit {
 					output.push(model);
 				}
 				this.OutputTaskList = output;
-				console.log(output);
+				//console.log(output);
 				this.populateIDLists();
 			},
 			error: (x) => {
@@ -163,7 +164,72 @@ export class AppComponent implements OnInit {
 	}
 
 
+	updateTodo(){
+		let tempPName: string = this.FormTaskProjectID;
+		let tempCName: string = this.FormProjectCategoryID;
 
+		this.FormTaskProjectID = this.updateID(this.FormTaskProjectID, this.OutputTaskProjectIDList).toString();
+
+		this.FormProjectCategoryID = this.updateID(this.FormProjectCategoryID, this.OutputProjectCategoryIDList).toString();
+		
+		console.log(`${this.FormTaskProjectID}, ${this.FormProjectCategoryID}, ${this.FormTaskCompletionStatus}, ${this.FormTaskDeadline}`);
+		
+		let noChange: string = this.TCS.NoChange.toString();
+		
+		let task: TaskRecordInputModel = {
+			InputTaskName: this.FormTaskName,
+			InputTaskDetails: this.FormTaskDetails,
+			InputTaskDeadline: this.FormTaskDeadline,
+			InputTaskCustomization: this.FormTaskCustomization,
+			InputTaskGrade: this.FormTaskGrade.toString(),
+			InputTaskWeight: this.FormTaskWeight.toString(),
+			InputTaskProjectName: tempPName,
+			InputTaskProjectID: this.FormTaskProjectID,
+			InputProjectCategoryName: tempCName,
+			InputProjectCategoryID: this.FormProjectCategoryID,
+			InputTaskCompletionStatus: this.FormTaskCompletionStatus.toString()
+		}
+
+		console.log(JSON.stringify(task))
+
+		if(this.FormIDEnd != ""){
+			this.http.patch(`${this.backendroute}/patch/${this.FormID}/${this.FormIDEnd}/${noChange}`, task).subscribe({
+				next: (x) => {
+					//alert("Added succesfully");
+					console.log(x)
+					this.getTodoList();
+					this.FormTaskProjectID = tempPName;
+					this.FormProjectCategoryID = tempCName;
+				},
+				error: (x) => {
+					//console.log("lalal");
+					//console.log(x);
+					console.error(x);
+					this.getTodoList();
+					this.FormTaskProjectID = tempPName;
+					this.FormProjectCategoryID = tempCName;
+				}
+			});
+		}else{
+			this.http.patch(`${this.backendroute}/patch/${this.FormID}/${noChange}`, task).subscribe({
+				next: (x) => {
+					//alert("Added succesfully");
+					console.log(x)
+					this.getTodoList();
+					this.FormTaskProjectID = tempPName;
+					this.FormProjectCategoryID = tempCName;
+				},
+				error: (x) => {
+					//console.log("lalal");
+					//console.log(x);
+					console.error(x);
+					this.getTodoList();
+					this.FormTaskProjectID = tempPName;
+					this.FormProjectCategoryID = tempCName;
+				}
+			});
+		}
+	}
 
 	addTodo() {
 		//let deadlinetemp = moment.default(this.FormTaskDeadline);

@@ -138,6 +138,11 @@ public class TaskRecordInputModel
 	public string InputProjectCategoryID => _projectCategoryID;
 	public string InputTaskCompletionStatus => _taskCompletionStatus;
 
+	public void sanitizeInputs(){
+		
+	}
+
+
 	//constructor parameters NEED to correspond to the names found in the JSON sent over here
 	public TaskRecordInputModel(string inputTaskName, string inputTaskDetails, string inputTaskDeadline, string inputTaskCustomization, string inputTaskWeight, string inputTaskGrade, string inputTaskProjectName, string inputTaskProjectID, string inputProjectCategoryName, string inputProjectCategoryID, string inputTaskCompletionStatus)
 	{

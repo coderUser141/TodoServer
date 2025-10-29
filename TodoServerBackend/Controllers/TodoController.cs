@@ -126,6 +126,29 @@ public class TodoController : ControllerBase
         }
     }
 
+    [HttpPatch("patch/{id}/{idend}/{nochange}")]
+    public IActionResult Patch([FromBody] TaskRecordInputModel value, long id, long idend, string nochange){
+        try{
+            SQLiteInterface.updateRecordsCompletionStatus(value, id, idend, nochange);
+        
+            return Ok($"Grape");
+        } catch (Exception error) {
+            string message = Config.Development ? $"{error.Message}\n{error.StackTrace}" : "No tasks with these parameters.";
+            return BadRequest(message);
+        }
+    }
+
+    [HttpPatch("patch/{id}/{nochange}")]
+    public IActionResult Patch([FromBody] TaskRecordInputModel value, long id, string nochange){
+        try{
+            SQLiteInterface.updateRecordsCompletionStatus(value, id, id, nochange);
+        
+            return Ok($"Grape");
+        } catch (Exception error) {
+            string message = Config.Development ? $"{error.Message}\n{error.StackTrace}" : "No tasks with these parameters.";
+            return BadRequest(message);
+        }
+    }
     
 
 

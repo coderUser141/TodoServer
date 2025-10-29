@@ -366,14 +366,36 @@ static class SQLiteInterface
 
 
 
-	public static void updateRecordsCompletionStatus(long id, long idend, long completionStatus, SQLIDColumn column = SQLIDColumn.ID)
+	public static void updateRecordsCompletionStatus(TaskRecordInputModel model, long id, long idend, string noChange)
 	{
-		using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
+        StringBuilder builder = new StringBuilder();
+
+
+		//the below conditions will update the table
+		if(model.InputProjectCategoryID != "0") builder.Append($"{DBColumns.ProjectCategoryID} = '{model.InputProjectCategoryID}',");
+		if(model.InputProjectCategoryName != "") builder.Append($"{DBColumns.ProjectCategoryName} = '{model.InputProjectCategoryName}',");
+		if(model.InputTaskCompletionStatus != "0" && model.InputTaskCompletionStatus != noChange) builder.Append($"{DBColumns.CompletionStatus} = '{model.InputTaskCompletionStatus}',");
+		if(model.InputTaskCustomization != "") builder.Append($"{DBColumns.Customization} = '{model.InputTaskCustomization}',");
+		if(model.InputTaskDeadline != "") builder.Append($"{DBColumns.Deadline} = '{model.InputTaskDeadline}',");
+		if(model.InputTaskDetails != "") builder.Append($"{DBColumns.Details} = '{model.InputTaskDetails}',");
+		if(model.InputTaskGrade != "0") builder.Append($"{DBColumns.Grade} = '{model.InputTaskGrade}',");
+		if(model.InputTaskName != "") builder.Append($"{DBColumns.Name} = '{model.InputTaskName}',");
+		if(model.InputTaskProjectID != "0") builder.Append($"{DBColumns.ProjectID} = '{model.InputTaskProjectID}',");
+		if(model.InputTaskProjectName != "") builder.Append($"{DBColumns.ProjectName} = '{model.InputTaskProjectName}',");
+		if(model.InputTaskWeight != "0") builder.Append($"{DBColumns.Weight} = '{model.InputTaskWeight}',");
+
+		if(builder[builder.Length - 1] == ','){
+            builder.Remove(builder.Length - 1, 1);
+        }
+
+
+
+        using (SQLiteConnection conn = new SQLiteConnection(ConnectionString))
 		{
 			using (SQLiteCommand cmd = conn.CreateCommand())
 			{
 				conn.Open();
-				cmd.CommandText = $"UPDATE tasklist SET CompletionStatus = {completionStatus} WHERE {column} BETWEEN {id} AND {idend}";
+				cmd.CommandText = $"UPDATE tasklist SET {builder} WHERE ID BETWEEN {id} AND {idend}";
 				cmd.ExecuteNonQuery();
 				conn.Close();
 			}

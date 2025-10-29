@@ -41,6 +41,7 @@ export interface TimeSyncModel {
 
 //https://fireflysemantics.medium.com/using-enum-values-in-angular-templates-abff7df6b4d2
 export enum TaskCompletionStatus{
+	NoChange = 100,
 	NotStarted = 101,
 	InProgress = 102,
 	Completed = 103,

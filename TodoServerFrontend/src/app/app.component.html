@@ -49,6 +49,7 @@
 		<br />
 		<label>
 			<select name="status">
+				<option (click)="updateCompletionStatus(TCS.NoChange)">____</option>
 				<option (click)="updateCompletionStatus(TCS.NotStarted)">Not Started</option>
 				<option (click)="updateCompletionStatus(TCS.InProgress)">In Progress</option>
 				<option (click)="updateCompletionStatus(TCS.Completed)">Completed</option>
@@ -68,6 +69,8 @@
 		<br />
 		<button (click)="getTodoWithID()">Get Task by ID</button>
 		<button (click)="getTodoList()">Get All Tasks</button>
+		<br />
+		<button (click)="updateTodo()">Update Task(s)</button>
 		<br />
 		<br />
 		<button (click)="deleteTodo()">Delete Task by ID</button>
